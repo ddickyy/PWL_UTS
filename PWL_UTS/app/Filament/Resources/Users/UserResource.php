@@ -8,6 +8,7 @@ use App\Filament\Resources\Users\Pages\ListUsers;
 use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
+use App\Models\UserModel;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -16,9 +17,12 @@ use Filament\Tables\Table;
 
 class UserResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = UserModel::class;
+    protected static ?string $navigationLabel = 'User';
+    protected static ?string $modelLabel = 'User';
+    protected static ?string $pluralModelLabel = 'User';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $recordTitleAttribute = 'name';
 
