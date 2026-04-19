@@ -16,6 +16,11 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
+use App\Filament\Resources\Penjualans\Pages\ViewPenjualan;
+use Filament\Infolists\Components\RepeatableEntry;
 
 class PenjualanResource extends Resource
 {
@@ -26,6 +31,68 @@ class PenjualanResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-currency-dollar';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return ($schema)
+            ->components([
+                Section::make('Informasi Penjualan')
+                    ->icon('heroicon-o-currency-dollar')
+                    ->schema([
+                        TextEntry::make('penjualan_id')
+                            ->label('ID Penjualan')
+                            ->icon('heroicon-o-key'),
+
+                        TextEntry::make('penjualan_kode')
+                            ->label('Kode Penjualan'),
+
+
+                        TextEntry::make('pembeli')
+                            ->label('Nama Pembeli')
+                            ->size('lg')
+                            ->weight('bold'),
+
+                        TextEntry::make('total_harga')
+                            ->label('Total Pembayaran')
+                            ->formatStateUsing(fn($state) => 'Rp ' . number_format((int) $state, 0, ',', '.')),
+                    ])
+                    ->columns(1),
+                Section::make('Detail Barang')
+                    ->icon('heroicon-o-rectangle-stack')
+                    ->schema([
+                        RepeatableEntry::make('details')
+                            ->schema([
+                                TextEntry::make('barang.barang_nama')
+                                    ->label('Barang'),
+
+                                TextEntry::make('jumlah')
+                                    ->label('Jumlah'),
+
+                                TextEntry::make('harga')
+                                    ->label('Harga')
+                                    ->formatStateUsing(fn($state) => 'Rp ' . number_format((int) $state, 0, ',', '.')),
+                            ])
+                            ->columns(3),
+                    ]),
+                Section::make('Informasi Tambahan')
+                    ->icon('heroicon-o-information-circle')
+                    ->schema([
+                        TextEntry::make('created_at')
+                            ->label('Dibuat Pada')
+                            ->icon('heroicon-o-calendar')
+                            ->placeholder('-'),
+                        TextEntry::make('updated_at')
+                            ->label('Diperbarui Pada')
+                            ->icon('heroicon-o-rectangle-stack')
+                            ->placeholder('-'),
+                        TextEntry::make('deleted_at')
+                            ->label('Dihapus Pada')
+                            ->icon('heroicon-o-trash')
+                            ->placeholder('-'),
+                    ])
+                    ->columns(1),
+            ])->columns(3);
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -50,6 +117,7 @@ class PenjualanResource extends Resource
             'index' => ListPenjualans::route('/'),
             'create' => CreatePenjualan::route('/create'),
             'edit' => EditPenjualan::route('/{record}/edit'),
+            'view' => ViewPenjualan::route('/{record}'),
         ];
     }
 

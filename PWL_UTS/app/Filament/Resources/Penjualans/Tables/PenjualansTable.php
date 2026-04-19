@@ -11,6 +11,7 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Filament\Actions\ViewAction;
 
 use function Laravel\Prompts\select;
 
@@ -38,6 +39,7 @@ class PenjualansTable
             ])
             ->recordActions([
                 EditAction::make(),
+                viewAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

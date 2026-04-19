@@ -32,4 +32,12 @@ class PenjualanModel extends Model
     {
         return $this->hasMany(PenjualanDetailModel::class, 'penjualan_id', 'penjualan_id');
     }
+    public function getTotalHargaAttribute(): int
+    {
+        $this->loadMissing('details');
+
+        return $this->details->sum(function ($detail) {
+            return (int) ($detail->harga ?? 0) * (int) ($detail->jumlah ?? 0);
+        });
+    }
 }
