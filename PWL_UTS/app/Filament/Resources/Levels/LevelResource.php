@@ -15,14 +15,17 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\LevelModel;
 
 class LevelResource extends Resource
 {
-    protected static ?string $model = Level::class;
+    protected static ?string $model = LevelModel::class;
+    protected static ?string $navigationLabel = 'Level';
+    protected static ?string $modelLabel = 'Level';
+    protected static ?string $pluralModelLabel = 'Level';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-shield-check';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
-    protected static ?string $recordTitleAttribute = 'name';
+    protected static ?string $recordTitleAttribute = 'Level';
 
     public static function form(Schema $schema): Schema
     {

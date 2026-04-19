@@ -9,6 +9,7 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
 
 class LevelsTable
 {
@@ -16,7 +17,12 @@ class LevelsTable
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('level_kode')
+                    ->label('Kode')
+                    ->searchable(),
+                TextColumn::make('level_nama')
+                    ->label('Nama')
+                    ->searchable(),
             ])
             ->filters([
                 TrashedFilter::make(),

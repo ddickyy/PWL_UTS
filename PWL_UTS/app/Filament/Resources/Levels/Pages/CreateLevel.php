@@ -8,4 +8,12 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateLevel extends CreateRecord
 {
     protected static string $resource = LevelResource::class;
+
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getCreateFormAction(),
+            $this->getCancelFormAction(),
+        ];
+    }
 }
