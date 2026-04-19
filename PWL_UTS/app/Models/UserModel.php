@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
+use Filament\Panel;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class UserModel extends Authenticatable
+class UserModel extends Authenticatable implements FilamentUser, HasName
 {
+    use HasFactory;
+
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
 
@@ -21,11 +27,18 @@ class UserModel extends Authenticatable
         'password',
     ];
 
-    protected function casts(): array
+    protected $casts = [
+        'password' => 'hashed',
+    ];
+
+    public function canAccessPanel(Panel $panel): bool
     {
-        return [
-            'password' => 'hashed',
-        ];
+        return true;
+    }
+
+    public function getFilamentName(): string
+    {
+        return (string) ($this->nama ?? $this->username ?? 'User');
     }
 
     public function level()
