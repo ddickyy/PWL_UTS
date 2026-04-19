@@ -8,6 +8,7 @@ use App\Filament\Resources\Suppliers\Pages\ListSuppliers;
 use App\Filament\Resources\Suppliers\Schemas\SupplierForm;
 use App\Filament\Resources\Suppliers\Tables\SuppliersTable;
 use App\Models\Supplier;
+use App\Models\SupplierModel;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,9 +19,12 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SupplierResource extends Resource
 {
-    protected static ?string $model = Supplier::class;
+    protected static ?string $model = SupplierModel::class;
+    protected static ?string $navigationLabel = 'Supplier';
+    protected static ?string $modelLabel = 'Supplier';
+    protected static ?string $pluralModelLabel = 'Supplier';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-truck';
 
     protected static ?string $recordTitleAttribute = 'name';
 
