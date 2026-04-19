@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class KategoriModel extends Model
 {
     protected $table = 'm_kategori';
     protected $primaryKey = 'kategori_id';
-
+    use SoftDeletes;
     protected $fillable = [
         'kategori_kode',
         'kategori_nama',

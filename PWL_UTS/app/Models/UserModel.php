@@ -5,13 +5,15 @@ namespace App\Models;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
+use Filament\Support\Concerns\HasFontFamily;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class UserModel extends Authenticatable implements FilamentUser, HasName
 {
     use HasFactory;
-
+    use SoftDeletes;
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
 
