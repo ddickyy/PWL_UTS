@@ -48,6 +48,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->widgets([
+                \App\Filament\Widgets\StatsDashboard::class,
             ]);
     }
 }

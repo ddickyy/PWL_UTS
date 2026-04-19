@@ -54,7 +54,7 @@ class PenjualanResource extends Resource
 
                         TextEntry::make('total_harga')
                             ->label('Total Pembayaran')
-                            ->formatStateUsing(fn($state) => 'Rp ' . number_format((int) $state, 0, ',', '.')),
+                            ->formatStateUsing(fn($state) => 'Rp' . number_format((int) $state, 0, ',', '.')),
                     ])
                     ->columns(1),
                 Section::make('Detail Barang')
@@ -70,7 +70,7 @@ class PenjualanResource extends Resource
 
                                 TextEntry::make('harga')
                                     ->label('Harga')
-                                    ->formatStateUsing(fn($state) => 'Rp ' . number_format((int) $state, 0, ',', '.')),
+                                    ->formatStateUsing(fn($state) => 'Rp' . number_format((int) $state, 0, ',', '.')),
                             ])
                             ->columns(3),
                     ]),
