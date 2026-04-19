@@ -16,6 +16,10 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
+use App\Filament\Resources\Suppliers\Pages\ViewSupplier;
 
 class SupplierResource extends Resource
 {
@@ -31,6 +35,42 @@ class SupplierResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return SupplierForm::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return ($schema) 
+            ->components([
+                Section::make('Informasi Supplier')
+                    ->icon('heroicon-o-truck')
+                    ->schema([
+                        TextEntry::make('supplier_id')
+                            ->label('ID Supplier')
+                            ->icon('heroicon-o-key'),
+                            TextEntry::make('supplier_nama')
+                            ->label('Nama Supplier')
+                            ->size('lg')
+                            ->weight('bold'),
+                            TextEntry::make('supplier_kode')
+                                ->label('Kode Supplier')
+                                ->badge()
+                                ->color('success'),
+                            TextEntry::make('supplier_alamat')
+                            ->label('Alamat Supplier'),
+                     ])
+                    ->columns(1),   
+                Section::make('Informasi Tambahan')
+                    ->icon('heroicon-o-information-circle')
+                    ->schema([
+                        TextEntry::make('created_at')
+                            ->label('Dibuat Pada')
+                            ->dateTime(),
+                        TextEntry::make('updated_at')
+                            ->label('Diperbarui Pada')
+                            ->dateTime(),
+                     ])
+                    ->columns(1),   
+             ])->columns(2);
     }
 
     public static function table(Table $table): Table
@@ -51,6 +91,7 @@ class SupplierResource extends Resource
             'index' => ListSuppliers::route('/'),
             'create' => CreateSupplier::route('/create'),
             'edit' => EditSupplier::route('/{record}/edit'),
+            'view' => ViewSupplier::route('/{record}'),
         ];
     }
 
