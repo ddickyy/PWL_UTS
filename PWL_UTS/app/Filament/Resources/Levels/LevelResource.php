@@ -16,6 +16,10 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\LevelModel;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
+use App\Filament\Resources\Levels\Pages\ViewLevel;
 
 class LevelResource extends Resource
 {
@@ -26,6 +30,41 @@ class LevelResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-shield-check';
 
     protected static ?string $recordTitleAttribute = 'Level';
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Section::make('Informasi Level')
+                    ->icon('heroicon-o-shield-check')
+                    ->schema([
+                        TextEntry::make('level_id')
+                            ->label('ID Level')
+                            ->icon('heroicon-o-key'),
+                        TextEntry::make('level_nama')
+                            ->label('Nama Level')
+                            ->size('lg')
+                            ->weight('bold'),
+                        TextEntry::make('level_kode')
+                            ->label('Kode Level')
+                            ->badge()
+                            ->color('success'),
+                        TextEntry::make('created_at')
+                            ->label('Dibuat Pada')
+                            ->icon('heroicon-o-calendar')
+                            ->placeholder('-'),
+                        TextEntry::make('updated_at')
+                            ->label('Diperbarui Pada')
+                            ->icon('heroicon-o-rectangle-stack')
+                            ->placeholder('-'),
+                        TextEntry::make('deleted_at')
+                            ->label('Dihapus Pada')
+                            ->icon('heroicon-o-trash')
+                            ->placeholder('-'),
+                     ])
+                    ->columnSpanFull(),
+             ]);
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -50,6 +89,7 @@ class LevelResource extends Resource
             'index' => ListLevels::route('/'),
             'create' => CreateLevel::route('/create'),
             'edit' => EditLevel::route('/{record}/edit'),
+            'view' => ViewLevel::route('/{record}'),
         ];
     }
 
