@@ -34,7 +34,7 @@ class LevelForm
                             ])
                             ->columns(2),
 
-                    ])
+                    ])->columnSpanFUll(),
             ]);
     }
 }
