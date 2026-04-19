@@ -8,6 +8,7 @@ use App\Filament\Resources\Stoks\Pages\ListStoks;
 use App\Filament\Resources\Stoks\Schemas\StokForm;
 use App\Filament\Resources\Stoks\Tables\StoksTable;
 use App\Models\Stok;
+use App\Models\StokModel;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,9 +19,12 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class StokResource extends Resource
 {
-    protected static ?string $model = Stok::class;
+    protected static ?string $model = StokModel::class;
+    protected static ?string $navigationLabel = 'Stok';
+    protected static ?string $modelLabel = 'Stok';
+    protected static ?string $pluralModelLabel = 'Stok';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-archive-box';
 
     protected static ?string $recordTitleAttribute = 'name';
 
