@@ -16,6 +16,10 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
+use App\Filament\Resources\Kategoris\Pages\ViewKategori;
 
 class KategoriResource extends Resource
 {
@@ -26,7 +30,48 @@ class KategoriResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
+
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function infolist($schema): Schema
+    {
+        return $schema
+            ->components([
+                Section::make('Informasi Kategori')
+                    ->icon('heroicon-o-rectangle-stack')
+                    ->schema([
+                        TextEntry::make('kategori_nama')
+                            ->label('Nama Kategori')
+                            ->size('lg')
+                            ->weight('bold'),
+                        TextEntry::make('kategori_id')
+                            ->label('ID Kategori')
+                            ->icon('heroicon-o-key'),
+                        TextEntry::make('kategori_kode')
+                            ->label('Kode Kategori')
+                            ->badge()
+                            ->color('success'),
+                     ])
+                    ->columns(1),   
+                Section::make('Informasi Tambahan')
+                    ->icon('heroicon-o-information-circle')
+                    ->schema([
+                        TextEntry::make('created_at')
+                            ->label('Dibuat Pada')
+                            ->icon('heroicon-o-calendar')
+                            ->placeholder('-'),
+                        TextEntry::make('updated_at')
+                            ->label('Diperbarui Pada')
+                            ->icon('heroicon-o-calendar')
+                            ->placeholder('-'),
+                        TextEntry::make('deleted_at')
+                            ->label('Dihapus Pada')
+                            ->icon('heroicon-o-calendar')
+                            ->placeholder('-'),
+                     ])
+                    ->columns(1),
+             ])->columns(2);     
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -51,6 +96,7 @@ class KategoriResource extends Resource
             'index' => ListKategoris::route('/'),
             'create' => CreateKategori::route('/create'),
             'edit' => EditKategori::route('/{record}/edit'),
+            'view' => ViewKategori::route('/{record}'),
         ];
     }
 
