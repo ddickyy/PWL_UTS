@@ -8,6 +8,7 @@ use App\Filament\Resources\Penjualans\Pages\ListPenjualans;
 use App\Filament\Resources\Penjualans\Schemas\PenjualanForm;
 use App\Filament\Resources\Penjualans\Tables\PenjualansTable;
 use App\Models\Penjualan;
+use App\Models\PenjualanModel;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,9 +19,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PenjualanResource extends Resource
 {
-    protected static ?string $model = Penjualan::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $model = PenjualanModel::class;
+    protected static ?string $navigationLabel = 'Penjualan';
+    protected static ?string $modelLabel = 'Penjualan';
+    protected static ?string $pluralModelLabel = 'Penjualan';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-currency-dollar';
 
     protected static ?string $recordTitleAttribute = 'name';
 
