@@ -8,4 +8,11 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateKategori extends CreateRecord
 {
     protected static string $resource = KategoriResource::class;
+        protected function getFormActions(): array
+    {
+        return [
+            $this->getCreateFormAction(),
+            $this->getCancelFormAction(),
+        ];
+    }
 }

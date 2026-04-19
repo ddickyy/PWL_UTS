@@ -8,6 +8,7 @@ use App\Filament\Resources\Kategoris\Pages\ListKategoris;
 use App\Filament\Resources\Kategoris\Schemas\KategoriForm;
 use App\Filament\Resources\Kategoris\Tables\KategorisTable;
 use App\Models\Kategori;
+use App\Models\KategoriModel;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,9 +19,12 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class KategoriResource extends Resource
 {
-    protected static ?string $model = Kategori::class;
+    protected static ?string $model = KategoriModel::class;
+    protected static ?string $navigationLabel = 'Kategori';
+    protected static ?string $modelLabel = 'Kategori';
+    protected static ?string $pluralModelLabel = 'Kategori';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $recordTitleAttribute = 'name';
 
