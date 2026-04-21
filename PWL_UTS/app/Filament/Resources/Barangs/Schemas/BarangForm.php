@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Barangs\Schemas;
 
+use App\Models\SupplierModel;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
@@ -32,6 +33,21 @@ class BarangForm
                                     ->prefixIcon('heroicon-o-archive-box')
                                     ->required(),
 
+                                Select::make('supplier_id')
+                                    ->label('Supplier')
+                                    ->options(SupplierModel::pluck('supplier_nama', 'supplier_id'))
+                                    ->searchable()
+                                    ->preload()
+                                    ->required()
+                                    ->dehydrated(false),
+
+                                TextInput::make('stok_awal')
+                                    ->label('Stok Awal')
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->dehydrated(false)
+                                    ->required(),
+
                                 TextInput::make('harga_beli')
                                     ->label('Harga Beli')
                                     ->prefix('Rp')
@@ -42,7 +58,8 @@ class BarangForm
                                     ->label('Harga Jual')
                                     ->prefix('Rp')
                                     ->numeric()
-                                    ->required(),  
+                                    ->required(),
+
                                 Select::make('kategori_id')
                                     ->label('Kategori')
                                     ->relationship('kategori', 'kategori_nama')
