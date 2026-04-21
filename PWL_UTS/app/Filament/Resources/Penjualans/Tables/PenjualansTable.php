@@ -12,6 +12,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Filament\Actions\ViewAction;
+use Filament\Actions\DeleteAction;
+use Illuminate\Support\Facades\DB;
+use App\Models\StokModel;
 
 use function Laravel\Prompts\select;
 
@@ -30,6 +33,9 @@ class PenjualansTable
                 TextColumn::make('pembeli')
                     ->label('Nama Pembeli')
                     ->searchable(),
+                TextColumn::make('total_harga')
+                    ->label('Total Bayar')
+                    ->formatStateUsing(fn($state) => 'Rp' . number_format((int) $state, 0, ',', '.')),
                 TextColumn::make('penjualan_tanggal')
                     ->label('Tanggal')
                     ->date(),
@@ -39,7 +45,26 @@ class PenjualansTable
             ])
             ->recordActions([
                 EditAction::make(),
-                viewAction::make(),
+                ViewAction::make(),
+                DeleteAction::make()
+                    ->before(function ($record) {
+
+                        DB::transaction(function () use ($record) {
+
+                            foreach ($record->details as $detail) {
+
+                                $stok = StokModel::where('barang_id', $detail->barang_id)
+                                    ->lockForUpdate()
+                                    ->orderBy('stok_tanggal', 'desc')
+                                    ->first();
+
+                                if ($stok) {
+                                    $stok->stok_jumlah += $detail->jumlah;
+                                    $stok->save();
+                                }
+                            }
+                        });
+                    })
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

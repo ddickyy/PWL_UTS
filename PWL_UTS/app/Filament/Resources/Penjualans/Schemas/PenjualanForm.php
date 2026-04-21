@@ -5,9 +5,13 @@ namespace App\Filament\Resources\Penjualans\Schemas;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
+use App\Models\BarangModel;
+use App\Models\StokModel;
 
 class PenjualanForm
 {
@@ -16,76 +20,101 @@ class PenjualanForm
         return $schema
             ->components([
                 Section::make('Informasi Penjualan')
-                    ->columnSpanFull()
-                    ->icon('heroicon-o-shopping-cart')
-                    ->description('Masukkan data penjualan')
                     ->schema([
 
                         Group::make()
                             ->schema([
                                 Select::make('user_id')
-                                    ->label('User')
                                     ->relationship('user', 'nama')
-                                    ->preload()
-                                    ->prefixIcon('heroicon-o-user')
                                     ->searchable()
+                                    ->preload()
                                     ->required(),
 
                                 TextInput::make('pembeli')
-                                    ->label('Pembeli')
-                                    ->prefixIcon('heroicon-o-user')
                                     ->required(),
                             ])
                             ->columns(2),
 
                         Section::make('Detail Barang')
                             ->schema([
+
                                 Repeater::make('details')
                                     ->relationship('details')
                                     ->schema([
-                                        Select::make('barang_id')
-                                            ->label('Barang')
-                                            ->relationship('barang', 'barang_nama')
-                                            ->searchable()
-                                            ->preload()
-                                            ->required()
-                                            ->reactive()
-                                            ->afterStateUpdated(function ($state, callable $set) {
-                                                $barang = \App\Models\BarangModel::find($state);
-                                                if ($barang) {
-                                                    $set('harga', $barang->harga_jual);
-                                                }
-                                            }),
 
-                                        TextInput::make('jumlah')
-                                            ->label('Jumlah')
-                                            ->numeric()
-                                            ->required(),
+                                        Grid::make(2)->schema([
 
-                                        TextInput::make('harga')
-                                            ->label('Harga')
-                                            ->prefix('Rp')
-                                            ->numeric()
-                                            ->readOnly()
-                                            ->required(),
+                                            Select::make('barang_id')
+                                                ->label('Barang')
+                                                ->relationship('barang', 'barang_nama')
+                                                ->searchable()
+                                                ->preload()
+                                                ->required()
+                                                ->live()
+                                                ->afterStateUpdated(function ($state, callable $set) {
+                                                    $barang = BarangModel::find($state);
+
+                                                    if ($barang) {
+                                                        $set('harga', $barang->harga_jual);
+                                                    }
+
+                                                    $stok = StokModel::where('barang_id', $state)
+                                                        ->orderBy('stok_tanggal', 'desc')
+                                                        ->first();
+
+                                                    $set('stok_available', $stok?->stok_jumlah ?? 0);
+                                                })
+                                                ->afterStateHydrated(function ($state, callable $set) {
+                                                    if (!$state) {
+                                                        return;
+                                                    }
+
+                                                    $barang = BarangModel::find($state);
+
+                                                    if ($barang) {
+                                                        $set('harga', $barang->harga_jual);
+                                                    }
+
+                                                    $stok = StokModel::where('barang_id', $state)
+                                                        ->orderBy('stok_tanggal', 'desc')
+                                                        ->first();
+
+                                                    $set('stok_available', $stok?->stok_jumlah ?? 0);
+                                                }),
+
+                                            TextInput::make('stok_available')
+                                                ->label('Stok')
+                                                ->disabled()
+                                                ->dehydrated(false),
+
+                                            TextInput::make('jumlah')
+                                                ->label('Jumlah')
+                                                ->numeric()
+                                                ->minValue(1)
+                                                ->maxValue(fn($get) => $get('stok_available') ?? 0)
+                                                ->required(),
+
+                                            TextInput::make('harga')
+                                                ->label('Harga')
+                                                ->numeric()
+                                                ->readOnly()
+                                                ->required(),
+
+                                        ]),
                                     ])
-                                    ->columns(3)
-                                    ->addActionLabel('Tambah Barang'),
+                                    ->columns(1),
                             ]),
 
                         Group::make()
                             ->schema([
                                 TextInput::make('penjualan_kode')
-                                    ->label('Kode Penjualan')
-                                    ->prefixIcon('heroicon-o-key')
                                     ->required(),
 
-                                TextInput::make('penjualan_tanggal')
-                                    ->label('Tanggal Penjualan')
-                                    ->type('date')
-                                    ->prefixIcon('heroicon-o-calendar')
+                                DatePicker::make('penjualan_tanggal')
                                     ->required(),
-                            ])->columns(2),
+                            ])
+                            ->columns(2),
+
                     ])
             ]);
     }

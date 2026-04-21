@@ -7,7 +7,6 @@ use App\Filament\Resources\Penjualans\Pages\EditPenjualan;
 use App\Filament\Resources\Penjualans\Pages\ListPenjualans;
 use App\Filament\Resources\Penjualans\Schemas\PenjualanForm;
 use App\Filament\Resources\Penjualans\Tables\PenjualansTable;
-use App\Models\Penjualan;
 use App\Models\PenjualanModel;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -21,6 +20,9 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use App\Filament\Resources\Penjualans\Pages\ViewPenjualan;
 use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Tables\Actions\DeleteAction;
+use App\Models\StokModel;
+use Illuminate\Support\Facades\DB;
 
 class PenjualanResource extends Resource
 {
@@ -102,6 +104,7 @@ class PenjualanResource extends Resource
     public static function table(Table $table): Table
     {
         return PenjualansTable::configure($table);
+        
     }
 
     public static function getRelations(): array
